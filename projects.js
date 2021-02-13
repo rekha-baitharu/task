@@ -6,6 +6,7 @@ export default class Projects extends React.Component {
         this.state = {
             data: [],
             value: 0,
+            checked:true
         }
     }
     componentDidMount() {
@@ -14,15 +15,13 @@ export default class Projects extends React.Component {
     
     }
     getNewData=()=>{
-        // this.setState({
-        //     value:this.state.value
-        // })
         fetch("https://reqres.in/api/users?page=1")
         .then((res) => res.json())
         .then(resJson => {
             this.setState({
                 data: resJson.data,
                 value:this.state.value
+                
             })
             console.log(resJson);
 
@@ -32,7 +31,7 @@ export default class Projects extends React.Component {
 
     getFirst = () => {
         this.setState({
-            value: 0
+            value: 0,
         })
 
         console.log(this.state.value);
@@ -43,12 +42,14 @@ export default class Projects extends React.Component {
          let alterarray = dataArray.slice(this.state.value)
          console.log(alterarray)
          console.log(dataArray)
-        // console.log(this.state.data)
-        // console.log(this.state.data.slice(this.state.value));
-        // console.log(this.state.value)
-        // this.setState({
-        //     value:5  
-        // })
+         this.setState({
+             data:dataArray
+         })
+        console.log(this.state.data)
+        console.log(this.state.value)
+        this.setState({
+            value:5     
+        })
        
     }
 
@@ -77,12 +78,9 @@ export default class Projects extends React.Component {
                     {this.state.data.map((s, index) => {
                         return (
                             <div>
-                                <li>{s.id}_{s.email}_{s.first_name}_{s.last_name} </li>
-                                <Checkbox value={this.state.value}
-
-                                // onChange={(e)=>{console.log(e.target.checked)}}
-                                 onClick={(e) =>{ if(e.target.checked === true){this.setState({value:s.id}) }} }
-                                 />
+                                <li>{s.id}_{s.email}_{s.first_name}_{s.last_name} 
+                                <Checkbox value={this.state.value} onClick={(e) =>{ if(e.target.checked === true){this.setState({value:s.id}) }} } onChange={(e)=>{console.log(e.target.checked)}} />
+                                </li>
                             </div>
                         )
                     })}
