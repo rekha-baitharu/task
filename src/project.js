@@ -6,18 +6,9 @@ export default class Projects extends React.Component {
         this.state = {
             data: [],
             value: "",
-            completed: []
         }
     }
-    componentDidMount() {
-        // this.getData();
-        // this.getNewData();
-
-    }
-    getNewData = () => {
-        // this.setState({
-        //     value:this.state.value
-        // })
+    getNewData = () => {   
         fetch("https://reqres.in/api/users?page=1")
             .then((res) => res.json())
             .then(resJson => {
@@ -35,27 +26,32 @@ export default class Projects extends React.Component {
             alert('Please Choose');
             return;
         }
-        let arr = []
-        arr = this.state.data;
-        let filArr = arr.filter(arrf => arrf.id !== this.state.value);
-        filArr.splice(0, 0, arr[(this.state.value)-1]);
+        let arrfirst = []
+        arrfirst = this.state.data;
+        let arrfirstfilter = arrfirst.filter(arrf => arrf.first_name !== this.state.value);
+        let removeElement = arrfirst.filter(arrf => arrf.first_name === this.state.value);
+        arrfirstfilter.splice(0, 0,removeElement[0]);
         this.setState({
-            data: filArr,
+            data: arrfirstfilter,
             value:""
         })
         
     }
-    getLast = (value) => {
+    getLast = () => {
         if(this.state.value ===""){
             alert('Please Choose');
             return;
         }
-        let arr = []
-        arr = this.state.data;
-        let filArr = arr.filter(arrf => arrf.id !== this.state.value);
-        filArr.splice(5, 0, arr[(this.state.value)-1]);
+        let arrLast = []
+        arrLast = this.state.data;
+         console.log("state value"+this.state.value)
+        console.log(arrLast)
+        let arrLastFilter = arrLast.filter(arrf => arrf.first_name !== this.state.value);
+        let removeElement = arrLast.filter(arrf => arrf.first_name === this.state.value);
+        arrLastFilter.splice(5, 0, removeElement[0]);
+      
         this.setState({
-            data: filArr,
+            data: arrLastFilter,
             value:""
         })
 
@@ -66,15 +62,27 @@ export default class Projects extends React.Component {
             alert('Please Choose');
             return;
         }
-        let arr = []
-        arr = this.state.data;
-        let filArr = arr.filter(arrf => arrf.id !== this.state.value);
-        filArr.splice((this.state.value) - 2, 0, arr[(this.state.value)-1]);
-        console.log(filArr)
+        let upArr = []
+        upArr = this.state.data;
+        let upFilArr = upArr.filter(arrf => arrf.first_name !== this.state.value);
+        let removeElement = upArr.filter(arrf => arrf.first_name === this.state.value);
+        let index = upArr.findIndex( element => {
+        if (element.first_name === this.state.value) {
+            return true;
+        }
+        });
+        if(index === 0){
+            alert("Cannot be Placed To Up");
+            this.setState({
+        })
+            return;
+        }
+        upFilArr.splice(index - 1, 0,removeElement[0]);
         this.setState({
-            data: filArr,
+            data: upFilArr,
             value:""
         })
+      
     }
 
     getDown = () => {
@@ -82,15 +90,25 @@ export default class Projects extends React.Component {
             alert('Please Choose');
             return;
         }
-        let arr = []
-        arr = this.state.data;
-        let filArr = arr.filter(arrf => arrf.id !== this.state.value);
-        filArr.splice((this.state.value) , 0, arr[(this.state.value)-1]);
-        console.log(filArr)
+        let downArr = []
+        downArr = this.state.data;
+        let downfilArr = downArr.filter(arrf => arrf.first_name !== this.state.value);
+        let removeElement = downArr.filter(arrf => arrf.first_name === this.state.value);
+        let index = downArr.findIndex( element => {
+        if (element.first_name === this.state.value) {
+            return true;
+        }
+        });
+        if(index === 5){
+            alert("Cannot be Placed To Down");
+            return;
+        }
+        downfilArr.splice(index+1, 0, removeElement[0]);
         this.setState({
-            data: filArr,
+            data: downfilArr,
             value:""
         })
+       
     }
 
     
@@ -100,25 +118,17 @@ export default class Projects extends React.Component {
             <div>
                 <ol>
                     {this.state.data
-                        // .filter((value) => {if(value ===this.state.value){
-                        //     value.push({
-                        //         value:5
-                        //     })
-                        // }})
                         .map((s, index) => {
                             return (
-                                <div>
-                                    <li>{index}_{s.email}_{s.first_name}_{s.last_name}
-                                        <Checkbox value={this.state.value}
-                                            // onChange={(e)=>{console.log(e.target.checked)}}
-                                            //  onClick={(e) =>{ if(e.target.checked === true){this.setState({value:index}) }} }
-                                            onClick={(e) => { if (e.target.checked === true) { this.setState({ value: s.id }) } }}
+                                <div >
+                                    <li key={s.id}>{s.email}{s.first_name}{s.last_name} 
+                                        <Checkbox value={this.state.value} 
+                                            onClick={(e) => { if (e.target.checked === true) { this.setState({ value: s.first_name }) } }}
                                         />
                                     </li>
                                 </div>
                             )
                         })}
-
                 </ol>
 
                 <button onClick={this.getNewData}>Click</button>
